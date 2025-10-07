@@ -27,16 +27,15 @@ abstract class DatabaseModel implements DatabaseWrapper
     $placeholders = [];
     foreach ($values as $key => $value) {
         $setPart .= "{$key} = ?, ";
-        $placeholders[] = $value; // Собираем значения для передачи
+        $placeholders[] = $value;
     }
-    $setPart = rtrim($setPart, ', '); // Убираем последнюю запятую
+    $setPart = rtrim($setPart, ', ');
 
-    // Создание SQL-запроса с плейсхолдерами
     $sql = "UPDATE {$this->tableName} SET {$setPart} WHERE id = ?";
-    $placeholders[] = $id; // Добавляем ID в качестве последнего параметра
+    $placeholders[] = $id;
 
     $stmt = $this->pdo->prepare($sql);
-    $stmt->execute($placeholders); // Передаем все параметры вместе
+    $stmt->execute($placeholders);
 
     return $this->find($id);
 }
@@ -69,7 +68,7 @@ class Order extends DatabaseModel
 {
     public function __construct($pdo)
     {
-        parent::__construct($pdo, 'order'); // Используйте двойные кавычки, если имя таблицы - зарезервированное слово
+        parent::__construct($pdo, 'order');
     }
 }
 
@@ -81,23 +80,21 @@ class Client extends DatabaseModel
     }
 }
 
-// Подключаемся к базе данных (замените на свой файл базы данных)
 $pdo = new PDO('sqlite:C:/Users/dimaa/Desktop/sql 3/sql.db');
 
-// Пример использования класса Shop
 $shop = new Shop($pdo);
 
 // Вставка новой записи в таблицу shop
 $newShop = $shop->insert(['name', 'address'], ['Магазин Е', '987 Улица Е']);
-print_r($newShop); // Печатаем вставленную запись
+print_r($newShop);
 
 // Обновление записи в таблице shop
 $updatedShop = $shop->update($newShop['id'], ['name' => 'Магазин']);
-print_r($updatedShop); // Печатаем изменённую запись
+print_r($updatedShop);
 
 // Поиск записи в таблице shop
 $foundShop = $shop->find($newShop['id']);
-print_r($foundShop); // Печатаем найденную запись
+print_r($foundShop);
 
 // Удаление записи из таблицы shop
 $deleted = $shop->delete($newShop['id']);
